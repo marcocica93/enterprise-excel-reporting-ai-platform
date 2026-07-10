@@ -2,8 +2,8 @@
 
 ## Document status
 
-- **Version:** 0.1
-- **Status:** Draft — core business rules confirmed
+- **Version:** 1.0
+- **Status:** Approved for MVP implementation
 - **Use case:** IT Ticket Backlog & SLA Reporting
 
 ## 1. Business problem
@@ -183,6 +183,37 @@ The processing run must record at least:
 - AI-generated management commentary;
 - real or confidential company data.
 
-## 12. Pending approval
+## 12. Acceptance criteria
 
-The definitive acceptance criteria and sample dataset specification must be approved before implementation begins.
+The MVP is accepted when:
+
+1. a valid `.xlsx` workbook containing the `Tickets` worksheet is processed successfully;
+2. a missing required worksheet or column stops processing with a clear error;
+3. invalid records are isolated without preventing valid records from being processed;
+4. every rejected record contains one or more rejection reasons;
+5. rejected records are excluded from business KPIs;
+6. backlog, completion, elapsed-time, and SLA calculations follow the approved formulas;
+7. a ticket exactly at the SLA threshold is classified as SLA met;
+8. every required output worksheet is generated;
+9. audit counts satisfy `input rows = valid rows + rejected rows`;
+10. identical input and `report_datetime` values produce identical business results;
+11. critical calculations and boundary conditions are covered by automated tests;
+12. only synthetic or anonymized data is used.
+
+## 13. Sample dataset specification
+
+The initial synthetic workbook will contain 30 ticket records:
+
+- 20 valid records;
+- 10 intentionally invalid records;
+- all supported statuses;
+- all supported priorities;
+- multiple operational teams;
+- tickets within SLA;
+- tickets outside SLA;
+- tickets exactly at the SLA threshold;
+- invalid dates, duplicate identifiers, missing values, and controlled-value violations.
+
+## 14. Approval record
+
+The use case, calendar-hour SLA model, backlog classification, validation rules, acceptance criteria, and sample dataset specification were explicitly approved before implementation.
