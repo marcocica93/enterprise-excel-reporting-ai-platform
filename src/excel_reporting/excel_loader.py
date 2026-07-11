@@ -16,6 +16,7 @@ REQUIRED_COLUMNS = {
     "assigned_team",
     "sla_target_hours",
 }
+
 def load_excel_tickets(
     file_path: str | Path,
     sheet_name: str = DEFAULT_SHEET_NAME,
@@ -34,6 +35,7 @@ def load_excel_tickets(
             f"Foglio '{sheet_name}' non trovato. "
             f"Fogli disponibili: {workbook.sheet_names}"
         )
+
     dataframe = pd.read_excel(workbook, sheet_name=sheet_name)
 
     missing_columns = REQUIRED_COLUMNS.difference(dataframe.columns)

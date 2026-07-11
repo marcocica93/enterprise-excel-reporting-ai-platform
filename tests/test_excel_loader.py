@@ -1,7 +1,7 @@
-import pytest
-import pandas as pd
-
 from pathlib import Path
+
+import pandas as pd
+import pytest
 
 from src.excel_reporting.excel_loader import (
     REQUIRED_COLUMNS,
@@ -17,9 +17,9 @@ def test_load_excel_tickets_returns_expected_dataframe() -> None:
 
     assert dataframe.shape == (30, 7)
     assert REQUIRED_COLUMNS.issubset(dataframe.columns)
+
+
 def test_load_excel_tickets_raises_error_when_file_is_missing() -> None:
-
-
     with pytest.raises(FileNotFoundError, match="File Excel non trovato"):
         load_excel_tickets("file_inesistente.xlsx")
 
