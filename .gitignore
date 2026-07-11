@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Project-generated artifacts
+data/output/*
+!data/output/.gitkeep
+
+reports/*
+!reports/.gitkeep
+
+# Temporary Excel files
+~$*.xlsx
+~$*.xls
