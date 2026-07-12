@@ -111,3 +111,32 @@ def test_validate_tickets_rejects_all_duplicate_ticket_ids() -> None:
         ["VAL-002"],
         ["VAL-002"],
     ]
+
+
+@pytest.mark.parametrize(
+    "invalid_created_at",
+    [None, "", "not-a-date"],
+)
+def test_validate_tickets_rejects_invalid_created_at(
+    invalid_created_at: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(ticket_id="TCK-001"),
+            make_valid_ticket(
+                ticket_id="TCK-002",
+                created_at=invalid_created_at,
+            ),
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records["ticket_id"].tolist() == ["TCK-001"]
+    assert result.rejected_records["ticket_id"].tolist() == ["TCK-002"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-003"
+    ]

@@ -44,6 +44,16 @@ def validate_tickets(
         if is_duplicate:
             validation_errors[position].append("VAL-002")
 
+    parsed_created_at = pd.to_datetime(
+        working_dataframe["created_at"],
+        errors="coerce",
+    )
+    invalid_created_at = parsed_created_at.isna()
+
+    for position, is_invalid in enumerate(invalid_created_at):
+        if is_invalid:
+            validation_errors[position].append("VAL-003")
+
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
     rejected_mask = (
