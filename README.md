@@ -10,6 +10,22 @@ Many business teams manage operational data through Excel workbooks. Manual vali
 
 This project progressively transforms that workflow into a modular, testable, and deployable Python application.
 
+## Project context
+
+This repository is both a working software product and a professional portfolio project. It demonstrates the progressive transition from Business Analysis toward Data Analysis, AI Automation, and Applied AI Engineering through an enterprise-oriented delivery lifecycle.
+
+Each increment connects a learning objective to a production-relevant component. Python, Pandas, NumPy, Excel automation, testing, Flask, REST APIs, JSON, and AI workflows are introduced only when the previous foundations are sufficiently stable.
+
+The objective is not merely to produce code, but to demonstrate:
+
+- translation of business requirements into technical specifications;
+- explicit and testable business rules;
+- data-quality and auditability controls;
+- modular software architecture;
+- automated testing and code review;
+- versioned, documented, and traceable delivery;
+- responsible use of AI throughout the development lifecycle.
+
 ## MVP business objective
 
 Build an MVP that can:
@@ -39,6 +55,19 @@ Completed capabilities:
 - initial dependency and repository structure.
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+## Current development focus
+
+The next planned milestone is **v0.2.0 — Validation Engine and data-quality controls**.
+
+The next increment will focus on:
+
+- record-level validation rules;
+- collection of all applicable rejection reasons;
+- separation of valid and rejected records;
+- deterministic validation results;
+- unit tests covering normal, boundary, and invalid cases;
+- documentation of implemented business rules.
 
 ## Planned evolution
 
@@ -82,6 +111,20 @@ The roadmap is outcome-based: version numbers are assigned only when the corresp
 - Synthetic or anonymized sample data only
 - Documentation as part of the deliverable
 - Business logic independent from Flask and other delivery interfaces
+
+## AI-assisted development approach
+
+AI is used as an engineering copilot for planning, implementation support, code review, debugging, testing, and documentation. It does not replace ownership of requirements or technical decisions.
+
+The development workflow keeps human responsibility over:
+
+- business meaning and acceptance criteria;
+- architecture and scope decisions;
+- review of generated code;
+- validation of tests and outputs;
+- approval of release checkpoints.
+
+Deterministic Python and Pandas components calculate and validate operational results. The future AI Reporting Agent will interpret only validated outputs and will never invent KPI values.
 
 ## Delivery approach
 
