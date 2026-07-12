@@ -88,3 +88,26 @@ def test_validate_tickets_does_not_modify_source_dataframe() -> None:
         dataframe,
         original_dataframe,
     )
+def test_validate_tickets_rejects_all_duplicate_ticket_ids() -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(ticket_id="TCK-DUP"),
+            make_valid_ticket(ticket_id="TCK-DUP"),
+            make_valid_ticket(ticket_id="TCK-UNIQUE"),
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records["ticket_id"].tolist() == ["TCK-UNIQUE"]
+    assert result.rejected_records["ticket_id"].tolist() == [
+        "TCK-DUP",
+        "TCK-DUP",
+    ]
+    assert result.rejected_records["validation_errors"].tolist() == [
+        ["VAL-002"],
+        ["VAL-002"],
+    ]

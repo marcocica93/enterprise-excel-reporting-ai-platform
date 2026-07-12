@@ -35,6 +35,15 @@ def validate_tickets(
         for is_missing in missing_ticket_id.fillna(False)
     ]
 
+    duplicate_ticket_id = (
+        ~missing_ticket_id.fillna(False)
+        & working_dataframe["ticket_id"].duplicated(keep=False)
+    )
+
+    for position, is_duplicate in enumerate(duplicate_ticket_id):
+        if is_duplicate:
+            validation_errors[position].append("VAL-002")
+
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
     rejected_mask = (
