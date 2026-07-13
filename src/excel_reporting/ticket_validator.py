@@ -6,6 +6,12 @@ import pandas as pd
 
 
 VALIDATION_ERRORS_COLUMN = "validation_errors"
+SUPPORTED_STATUSES = (
+    "OPEN",
+    "IN_PROGRESS",
+    "RESOLVED",
+    "CLOSED",
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -64,6 +70,14 @@ def validate_tickets(
     ):
         if is_after_report_datetime:
             validation_errors[position].append("VAL-004")
+
+    unsupported_status = ~working_dataframe["status"].isin(
+        SUPPORTED_STATUSES
+    )
+
+    for position, is_unsupported in enumerate(unsupported_status):
+        if is_unsupported:
+            validation_errors[position].append("VAL-005")
 
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 

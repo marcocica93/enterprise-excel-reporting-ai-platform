@@ -170,3 +170,73 @@ def test_validate_tickets_applies_created_at_report_datetime_boundary(
     else:
         assert result.rejected_records.empty
         assert result.valid_records["ticket_id"].tolist() == ["TCK-001"]
+
+
+@pytest.mark.parametrize(
+    ("status", "closed_at"),
+    [
+        ("OPEN", pd.NaT),
+        ("IN_PROGRESS", pd.NaT),
+        ("RESOLVED", pd.Timestamp("2026-06-30 12:00")),
+        ("CLOSED", pd.Timestamp("2026-06-30 12:00")),
+    ],
+)
+def test_validate_tickets_accepts_supported_statuses(
+    status: str,
+    closed_at: pd.Timestamp,
+) -> None:
+    dataframe = pd.DataFrame(
+        [make_valid_ticket(status=status, closed_at=closed_at)]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.rejected_records.empty
+    assert result.valid_records["status"].tolist() == [status]
+
+
+@pytest.mark.parametrize(
+    "invalid_status",
+    [None, "", "PENDING", "open", " OPEN "],
+)
+def test_validate_tickets_rejects_unsupported_status(
+    invalid_status: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [make_valid_ticket(status=invalid_status)]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-005"
+    ]
+
+
+def test_validate_tickets_accumulates_created_at_and_status_errors() -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                created_at="not-a-date",
+                status="PENDING",
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-003",
+        "VAL-005",
+    ]
