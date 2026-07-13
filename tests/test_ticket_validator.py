@@ -140,3 +140,33 @@ def test_validate_tickets_rejects_invalid_created_at(
     assert result.rejected_records.iloc[0]["validation_errors"] == [
         "VAL-003"
     ]
+
+
+@pytest.mark.parametrize(
+    ("created_at", "expected_errors"),
+    [
+        (REPORT_DATETIME, []),
+        (REPORT_DATETIME + pd.Timedelta(seconds=1), ["VAL-004"]),
+    ],
+)
+def test_validate_tickets_applies_created_at_report_datetime_boundary(
+    created_at: pd.Timestamp,
+    expected_errors: list[str],
+) -> None:
+    dataframe = pd.DataFrame(
+        [make_valid_ticket(created_at=created_at)]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    if expected_errors:
+        assert result.valid_records.empty
+        assert result.rejected_records.iloc[0]["validation_errors"] == (
+            expected_errors
+        )
+    else:
+        assert result.rejected_records.empty
+        assert result.valid_records["ticket_id"].tolist() == ["TCK-001"]

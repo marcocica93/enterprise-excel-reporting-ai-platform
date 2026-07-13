@@ -54,6 +54,17 @@ def validate_tickets(
         if is_invalid:
             validation_errors[position].append("VAL-003")
 
+    created_at_after_report_datetime = (
+        parsed_created_at.notna()
+        & parsed_created_at.gt(report_datetime)
+    )
+
+    for position, is_after_report_datetime in enumerate(
+        created_at_after_report_datetime
+    ):
+        if is_after_report_datetime:
+            validation_errors[position].append("VAL-004")
+
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
     rejected_mask = (
