@@ -43,7 +43,10 @@ def test_validation_result_keeps_valid_and_rejected_records() -> None:
     )
 
     pd.testing.assert_frame_equal(result.valid_records, valid_records)
-    pd.testing.assert_frame_equal(result.rejected_records, rejected_records)
+    pd.testing.assert_frame_equal(
+        result.rejected_records,
+        rejected_records,
+    )
 
 
 @pytest.mark.parametrize(
@@ -67,10 +70,12 @@ def test_validate_tickets_rejects_missing_ticket_id(
 
     assert result.valid_records["ticket_id"].tolist() == ["TCK-001"]
     assert len(result.rejected_records) == 1
-    assert result.rejected_records.iloc[0]["validation_errors"] == ["VAL-001"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-001"
+    ]
+
+
 def test_validate_tickets_does_not_modify_source_dataframe() -> None:
-
-
     dataframe = pd.DataFrame(
         [
             make_valid_ticket(),
@@ -88,6 +93,8 @@ def test_validate_tickets_does_not_modify_source_dataframe() -> None:
         dataframe,
         original_dataframe,
     )
+
+
 def test_validate_tickets_rejects_all_duplicate_ticket_ids() -> None:
     dataframe = pd.DataFrame(
         [
@@ -336,3 +343,36 @@ def test_validate_tickets_applies_closed_at_created_at_boundary(
     else:
         assert result.rejected_records.empty
         assert result.valid_records["ticket_id"].tolist() == ["TCK-001"]
+
+
+@pytest.mark.parametrize(
+    "invalid_closed_at",
+    [
+        "",
+        "   ",
+        "not-a-date",
+        "2026-02-30",
+    ],
+)
+def test_validate_tickets_rejects_invalid_closed_at(
+    invalid_closed_at: str,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                status="CLOSED",
+                closed_at=invalid_closed_at,
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["ticket_id"].tolist() == ["TCK-001"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-009"
+    ]

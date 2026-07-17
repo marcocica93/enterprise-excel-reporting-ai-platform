@@ -116,6 +116,15 @@ def validate_tickets(
         errors="coerce",
     )
 
+    invalid_closed_at = (
+        working_dataframe["closed_at"].notna()
+        & parsed_closed_at.isna()
+    )
+
+    for position, is_invalid in enumerate(invalid_closed_at):
+        if is_invalid:
+            validation_errors[position].append("VAL-009")
+
     closed_at_before_created_at = (
         parsed_closed_at.notna()
         & parsed_created_at.notna()
