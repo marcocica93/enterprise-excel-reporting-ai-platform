@@ -111,6 +111,23 @@ def validate_tickets(
         if has_closed_at:
             validation_errors[position].append("VAL-007")
 
+    parsed_closed_at = pd.to_datetime(
+        working_dataframe["closed_at"],
+        errors="coerce",
+    )
+
+    closed_at_before_created_at = (
+        parsed_closed_at.notna()
+        & parsed_created_at.notna()
+        & parsed_closed_at.lt(parsed_created_at)
+    )
+
+    for position, is_before_created_at in enumerate(
+        closed_at_before_created_at
+    ):
+        if is_before_created_at:
+            validation_errors[position].append("VAL-008")
+
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
     rejected_mask = (
