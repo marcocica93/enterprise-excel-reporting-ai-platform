@@ -13,6 +13,11 @@ SUPPORTED_STATUSES = (
     "CLOSED",
 )
 
+ACTIVE_STATUSES = (
+    "OPEN",
+    "IN_PROGRESS",
+)
+
 COMPLETED_STATUSES = (
     "RESOLVED",
     "CLOSED",
@@ -94,6 +99,17 @@ def validate_tickets(
     ):
         if is_missing_closed_at:
             validation_errors[position].append("VAL-006")
+
+    active_with_closed_at = (
+        working_dataframe["status"].isin(ACTIVE_STATUSES)
+        & working_dataframe["closed_at"].notna()
+    )
+
+    for position, has_closed_at in enumerate(
+        active_with_closed_at
+    ):
+        if has_closed_at:
+            validation_errors[position].append("VAL-007")
 
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 

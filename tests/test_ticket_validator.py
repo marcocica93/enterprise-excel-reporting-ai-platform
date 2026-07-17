@@ -270,3 +270,33 @@ def test_validate_tickets_rejects_completed_ticket_without_closed_at(
     assert result.rejected_records.iloc[0]["validation_errors"] == [
         "VAL-006"
     ]
+
+
+@pytest.mark.parametrize(
+    "active_status",
+    ["OPEN", "IN_PROGRESS"],
+)
+def test_validate_tickets_rejects_active_ticket_with_closed_at(
+    active_status: str,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                status=active_status,
+                closed_at=pd.Timestamp("2026-06-30 12:00"),
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["status"].tolist() == [
+        active_status
+    ]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-007"
+    ]
