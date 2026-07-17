@@ -240,3 +240,33 @@ def test_validate_tickets_accumulates_created_at_and_status_errors() -> None:
         "VAL-003",
         "VAL-005",
     ]
+
+
+@pytest.mark.parametrize(
+    "completed_status",
+    ["RESOLVED", "CLOSED"],
+)
+def test_validate_tickets_rejects_completed_ticket_without_closed_at(
+    completed_status: str,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                status=completed_status,
+                closed_at=pd.NaT,
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["status"].tolist() == [
+        completed_status
+    ]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-006"
+    ]

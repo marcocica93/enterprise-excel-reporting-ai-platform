@@ -13,6 +13,11 @@ SUPPORTED_STATUSES = (
     "CLOSED",
 )
 
+COMPLETED_STATUSES = (
+    "RESOLVED",
+    "CLOSED",
+)
+
 
 @dataclass(frozen=True, slots=True)
 class ValidationResult:
@@ -78,6 +83,17 @@ def validate_tickets(
     for position, is_unsupported in enumerate(unsupported_status):
         if is_unsupported:
             validation_errors[position].append("VAL-005")
+
+    completed_without_closed_at = (
+        working_dataframe["status"].isin(COMPLETED_STATUSES)
+        & working_dataframe["closed_at"].isna()
+    )
+
+    for position, is_missing_closed_at in enumerate(
+        completed_without_closed_at
+    ):
+        if is_missing_closed_at:
+            validation_errors[position].append("VAL-006")
 
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
