@@ -376,3 +376,47 @@ def test_validate_tickets_rejects_invalid_closed_at(
     assert result.rejected_records.iloc[0]["validation_errors"] == [
         "VAL-009"
     ]
+
+
+@pytest.mark.parametrize(
+    "supported_priority",
+    ["P1", "P2", "P3", "P4"],
+)
+def test_validate_tickets_accepts_supported_priority(
+    supported_priority: str,
+) -> None:
+    dataframe = pd.DataFrame(
+        [make_valid_ticket(priority=supported_priority)]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.rejected_records.empty
+    assert result.valid_records["priority"].tolist() == [
+        supported_priority
+    ]
+
+
+@pytest.mark.parametrize(
+    "invalid_priority",
+    [None, "", "   ", "P0", "P5", "p1", " P1 "],
+)
+def test_validate_tickets_rejects_unsupported_priority(
+    invalid_priority: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [make_valid_ticket(priority=invalid_priority)]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-010"
+    ]

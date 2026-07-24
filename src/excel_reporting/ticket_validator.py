@@ -6,11 +6,19 @@ import pandas as pd
 
 
 VALIDATION_ERRORS_COLUMN = "validation_errors"
+
 SUPPORTED_STATUSES = (
     "OPEN",
     "IN_PROGRESS",
     "RESOLVED",
     "CLOSED",
+)
+
+SUPPORTED_PRIORITIES = (
+    "P1",
+    "P2",
+    "P3",
+    "P4",
 )
 
 ACTIVE_STATUSES = (
@@ -105,9 +113,7 @@ def validate_tickets(
         & working_dataframe["closed_at"].notna()
     )
 
-    for position, has_closed_at in enumerate(
-        active_with_closed_at
-    ):
+    for position, has_closed_at in enumerate(active_with_closed_at):
         if has_closed_at:
             validation_errors[position].append("VAL-007")
 
@@ -136,6 +142,14 @@ def validate_tickets(
     ):
         if is_before_created_at:
             validation_errors[position].append("VAL-008")
+
+    unsupported_priority = ~working_dataframe["priority"].isin(
+        SUPPORTED_PRIORITIES
+    )
+
+    for position, is_unsupported in enumerate(unsupported_priority):
+        if is_unsupported:
+            validation_errors[position].append("VAL-010")
 
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
