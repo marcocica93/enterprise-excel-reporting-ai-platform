@@ -420,3 +420,29 @@ def test_validate_tickets_rejects_unsupported_priority(
     assert result.rejected_records.iloc[0]["validation_errors"] == [
         "VAL-010"
     ]
+
+@pytest.mark.parametrize(
+    "invalid_assigned_team",
+    [None, "", "   "],
+)
+def test_validate_tickets_rejects_missing_assigned_team(
+    invalid_assigned_team: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                assigned_team=invalid_assigned_team,
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["ticket_id"].tolist() == ["TCK-001"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-011"
+    ]

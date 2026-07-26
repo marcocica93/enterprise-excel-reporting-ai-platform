@@ -151,6 +151,20 @@ def validate_tickets(
         if is_unsupported:
             validation_errors[position].append("VAL-010")
 
+    assigned_team_as_text = working_dataframe["assigned_team"].astype(
+        "string"
+    )
+    missing_assigned_team = (
+        working_dataframe["assigned_team"].isna()
+        | assigned_team_as_text.str.strip().eq("")
+    )
+
+    for position, is_missing in enumerate(
+        missing_assigned_team.fillna(False)
+    ):
+        if is_missing:
+            validation_errors[position].append("VAL-011")
+
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
     rejected_mask = (
