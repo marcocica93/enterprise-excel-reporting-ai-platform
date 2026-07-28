@@ -1,6 +1,6 @@
 # Enterprise Excel Reporting & AI Platform
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](CHANGELOG.md)
 
 An enterprise-oriented Python platform for validating operational Excel data, applying deterministic business rules, calculating KPIs, producing auditable reports, and later generating AI-assisted management commentary.
 
@@ -41,39 +41,57 @@ The approved initial use case is IT ticket management, backlog monitoring, SLA v
 
 ## Current release
 
-**v0.1.0 — Project foundation and Excel Loader baseline**
+**v0.2.0 — Validation Engine and data-quality controls**
 
 Completed capabilities:
 
-- approved MVP business requirements;
-- pragmatic hexagonal architecture and ADR-001;
-- verified 30-record synthetic IT ticket dataset;
 - controlled Excel loading from the `Tickets` worksheet;
-- required-column validation;
-- explicit errors for missing files, worksheets, and columns;
-- four automated tests covering the loader foundation;
-- initial dependency and repository structure.
+- required-column and workbook-structure validation;
+- deterministic record-level Ticket Validation Engine;
+- separation of valid and rejected records through the `ValidationResult` contract;
+- collection of all applicable validation errors on rejected records;
+- twelve explicit data-quality rules covering identifiers, timestamps, statuses, priorities, assigned teams, and SLA targets;
+- preservation of the source DataFrame;
+- automated coverage for normal, invalid, and boundary cases;
+- verified synthetic acceptance dataset: 30 total records, 20 valid and 10 rejected;
+- 57 automated tests covering the Excel Loader and Validation Engine.
 
-See [CHANGELOG.md](CHANGELOG.md) for release history.
+See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
+
+## Validation rules
+
+| Rule | Validation |
+|---|---|
+| `VAL-001` | `ticket_id` is required |
+| `VAL-002` | Every occurrence of a duplicated `ticket_id` is rejected |
+| `VAL-003` | `created_at` must be a valid datetime |
+| `VAL-004` | `created_at` must not be later than the report datetime |
+| `VAL-005` | Status must be `OPEN`, `IN_PROGRESS`, `RESOLVED`, or `CLOSED` |
+| `VAL-006` | Completed tickets require `closed_at` |
+| `VAL-007` | Active tickets must not contain `closed_at` |
+| `VAL-008` | `closed_at` must not precede `created_at` |
+| `VAL-009` | `closed_at`, when present, must be a valid datetime |
+| `VAL-010` | Priority must be `P1`, `P2`, `P3`, or `P4` |
+| `VAL-011` | `assigned_team` is required |
+| `VAL-012` | `sla_target_hours` must be present, numeric, and greater than zero |
 
 ## Current development focus
 
-The next planned milestone is **v0.2.0 — Validation Engine and data-quality controls**.
+The next planned milestone is **v0.3.0 — Cleaning and Business Rules Engine**.
 
 The next increment will focus on:
 
-- record-level validation rules;
-- collection of all applicable rejection reasons;
-- separation of valid and rejected records;
-- deterministic validation results;
-- unit tests covering normal, boundary, and invalid cases;
-- documentation of implemented business rules.
+- controlled normalization of validated records;
+- explicit separation between data cleaning and business rules;
+- deterministic business-rule outputs;
+- preservation of traceability between source and processed data;
+- automated tests for transformations, boundaries, and invalid inputs;
+- documentation of cleaning decisions and business assumptions.
 
 ## Planned evolution
 
 The project will grow incrementally through the following capabilities:
 
-- Validation Engine
 - Cleaning Engine
 - Business Rules Engine
 - KPI Engine

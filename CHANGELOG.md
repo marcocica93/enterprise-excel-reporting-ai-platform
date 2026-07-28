@@ -8,9 +8,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Planned
 
-- Validation Engine and record-level data-quality controls
-- Structured rejection reasons
-- Valid and rejected dataset separation
+- Cleaning Engine and controlled data normalization
+- Business Rules Engine
+- Traceable transformations and expanded automated coverage
+
+## [0.2.0] - 2026-07-28
+
+### Added
+
+- Deterministic Ticket Validation Engine
+- `ValidationResult` contract separating valid and rejected records
+- Twelve explicit validation rules (`VAL-001`–`VAL-012`) covering required identifiers, duplicate tickets, datetime validity and ordering, supported statuses and priorities, status/closure consistency, assigned teams, and positive numeric SLA targets
+- Collection of all applicable validation errors on rejected records
+- Automated tests for normal, invalid, and exact-boundary behavior
+- Repository workflow and architecture guidance in `AGENTS.md`
+
+### Changed
+
+- Expanded the automated suite from 4 to 57 tests
+- Updated project documentation to identify the Validation Engine as the current completed release
+- Advanced the development focus to v0.3.0 — Cleaning and Business Rules Engine
+
+### Quality
+
+- Source DataFrames remain unchanged during validation
+- Existing Excel Loader behavior remains covered and regression-safe
+- Acceptance dataset verified at 30 total records: 20 valid and 10 rejected
+- Designed-invalid records produce the expected `VAL-001`–`VAL-012` reason sets
+- Full automated suite passed before release
 
 ## [0.1.0] - 2026-07-12
 
@@ -34,5 +59,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Deterministic calculations remain separated from future AI commentary
 - Business logic is designed to remain independent from future Flask delivery interfaces
 
-[Unreleased]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/releases/tag/v0.1.0
