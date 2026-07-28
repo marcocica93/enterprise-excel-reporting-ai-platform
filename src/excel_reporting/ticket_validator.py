@@ -165,6 +165,46 @@ def validate_tickets(
         if is_missing:
             validation_errors[position].append("VAL-011")
 
+    sla_target_hours_as_text = working_dataframe["sla_target_hours"].astype(
+        "string"
+    )
+    missing_sla_target_hours = (
+        working_dataframe["sla_target_hours"].isna()
+        | sla_target_hours_as_text.str.strip().eq("")
+    )
+
+    for position, is_missing in enumerate(
+        missing_sla_target_hours.fillna(False)
+    ):
+        if is_missing:
+            validation_errors[position].append("VAL-012")
+
+    numeric_sla_target_hours = pd.to_numeric(
+        working_dataframe["sla_target_hours"],
+        errors="coerce",
+    )
+    non_numeric_sla_target_hours = (
+        numeric_sla_target_hours.isna()
+        & ~missing_sla_target_hours.fillna(False)
+    )
+
+    for position, is_non_numeric in enumerate(
+        non_numeric_sla_target_hours
+    ):
+        if is_non_numeric:
+            validation_errors[position].append("VAL-012")
+
+    non_positive_sla_target_hours = (
+        numeric_sla_target_hours.notna()
+        & numeric_sla_target_hours.le(0)
+    )
+
+    for position, is_non_positive in enumerate(
+        non_positive_sla_target_hours
+    ):
+        if is_non_positive:
+            validation_errors[position].append("VAL-012")
+
     working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
 
     rejected_mask = (

@@ -421,6 +421,7 @@ def test_validate_tickets_rejects_unsupported_priority(
         "VAL-010"
     ]
 
+
 @pytest.mark.parametrize(
     "invalid_assigned_team",
     [None, "", "   "],
@@ -445,4 +446,85 @@ def test_validate_tickets_rejects_missing_assigned_team(
     assert result.rejected_records["ticket_id"].tolist() == ["TCK-001"]
     assert result.rejected_records.iloc[0]["validation_errors"] == [
         "VAL-011"
+    ]
+
+
+@pytest.mark.parametrize(
+    "invalid_sla_target_hours",
+    [None, "", "   "],
+)
+def test_validate_tickets_rejects_missing_sla_target_hours(
+    invalid_sla_target_hours: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                sla_target_hours=invalid_sla_target_hours,
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["ticket_id"].tolist() == ["TCK-001"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-012"
+    ]
+
+
+@pytest.mark.parametrize(
+    "invalid_sla_target_hours",
+    ["not-a-number", "24 hours"],
+)
+def test_validate_tickets_rejects_non_numeric_sla_target_hours(
+    invalid_sla_target_hours: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                sla_target_hours=invalid_sla_target_hours,
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["ticket_id"].tolist() == ["TCK-001"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-012"
+    ]
+
+
+@pytest.mark.parametrize(
+    "invalid_sla_target_hours",
+    [0, -1, -0.5],
+)
+def test_validate_tickets_rejects_non_positive_sla_target_hours(
+    invalid_sla_target_hours: object,
+) -> None:
+    dataframe = pd.DataFrame(
+        [
+            make_valid_ticket(
+                sla_target_hours=invalid_sla_target_hours,
+            )
+        ]
+    )
+
+    result = validate_tickets(
+        dataframe=dataframe,
+        report_datetime=REPORT_DATETIME,
+    )
+
+    assert result.valid_records.empty
+    assert result.rejected_records["ticket_id"].tolist() == ["TCK-001"]
+    assert result.rejected_records.iloc[0]["validation_errors"] == [
+        "VAL-012"
     ]
