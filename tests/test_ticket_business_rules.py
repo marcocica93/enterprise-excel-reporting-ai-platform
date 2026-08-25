@@ -28,6 +28,7 @@ def test_classify_ticket_lifecycle_groups_supported_statuses() -> None:
         "COMPLETED",
     ]
 
+
 def test_classify_ticket_lifecycle_rejects_unsupported_status() -> None:
     dataframe = pd.DataFrame(
         {
@@ -43,6 +44,7 @@ def test_classify_ticket_lifecycle_rejects_unsupported_status() -> None:
         match="Unsupported ticket status: PENDING",
     ):
         classify_ticket_lifecycle(dataframe)
+
 
 def test_classify_ticket_lifecycle_does_not_modify_source_dataframe() -> None:
     dataframe = pd.DataFrame(
