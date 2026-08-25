@@ -71,7 +71,12 @@ See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
 | `VAL-006` | Completed tickets require `closed_at` |
 | `VAL-007` | Active tickets must not contain `closed_at` |
 | `VAL-008` | `closed_at` must not precede `created_at` |
-| `VAL-009` | `closed_at`, when present, must be## Current development focus
+| `VAL-009` | `closed_at`, when present, must be a valid datetime |
+| `VAL-010` | Priority must be `P1`, `P2`, `P3`, or `P4` |
+| `VAL-011` | `assigned_team` is required |
+| `VAL-012` | `sla_target_hours` must be present, numeric, and greater than zero |
+
+## Current development focus
 
 **v0.3.0 — Cleaning and Business Rules Engine (in progress)**
 
@@ -90,10 +95,6 @@ Remaining before the stable `v0.3.0` release:
 - `BR-002`: deterministic calculation of `elapsed_hours`;
 - SLA compliance and breach classification rules;
 - integration review, final documentation, and release verification.
-puts;
-- preservation of traceability between source and processed data;
-- automated tests for transformations, boundaries, and invalid inputs;
-- documentation of cleaning decisions and business assumptions.
 
 ## Planned evolution
 
