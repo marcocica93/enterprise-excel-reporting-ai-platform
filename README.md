@@ -1,6 +1,7 @@
 # Enterprise Excel Reporting & AI Platform
 
-[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](CHANGELOG.md)
+[![Release](https://img.shields.io/badge/release-0.2.0-blue.svg)](CHANGELOG.md)
+[![Development](https://img.shields.io/badge/development-0.3.0%20in%20progress-orange.svg)](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/cleaning-business-rules-engine)
 
 An enterprise-oriented Python platform for validating operational Excel data, applying deterministic business rules, calculating KPIs, producing auditable reports, and later generating AI-assisted management commentary.
 
@@ -77,16 +78,23 @@ See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
 
 ## Current development focus
 
-The next planned milestone is **v0.3.0 — Cleaning and Business Rules Engine**.
+**v0.3.0 — Cleaning and Business Rules Engine (in progress)**
 
-The next increment will focus on:
+Development is active on [`feature/cleaning-business-rules-engine`](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/cleaning-business-rules-engine).
 
-- controlled normalization of validated records;
-- explicit separation between data cleaning and business rules;
-- deterministic business-rule outputs;
-- preservation of traceability between source and processed data;
-- automated tests for transformations, boundaries, and invalid inputs;
-- documentation of cleaning decisions and business assumptions.
+Completed in the current development branch:
+
+- Ticket Cleaning foundation with deterministic normalization of `created_at`, `closed_at`, and `sla_target_hours`;
+- preservation of the source DataFrame during cleaning and business-rule processing;
+- `BR-001`: lifecycle classification from operational statuses into `BACKLOG` and `COMPLETED`;
+- fail-fast protection for unsupported statuses reaching the Business Rules Engine;
+- 65 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine.
+
+Remaining before the stable `v0.3.0` release:
+
+- `BR-002`: deterministic calculation of `elapsed_hours`;
+- SLA compliance and breach classification rules;
+- integration review, final documentation, and release verification.
 
 ## Planned evolution
 

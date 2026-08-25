@@ -6,11 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Planned
+### In development
 
-- Cleaning Engine and controlled data normalization
-- Business Rules Engine
-- Traceable transformations and expanded automated coverage
+- v0.3.0 — Cleaning and Business Rules Engine
+- Ticket Cleaning foundation with deterministic datetime and SLA-target normalization
+- `BR-001` lifecycle classification into `BACKLOG` and `COMPLETED`
+- Fail-fast protection for unsupported statuses reaching the Business Rules Engine
+
+### Quality
+
+- Source DataFrames remain unchanged during cleaning and lifecycle classification
+- Automated suite expanded from 57 to 65 passing tests
+- Existing Excel Loader and Validation Engine behavior remains regression-safe
+
+### Remaining before release
+
+- `BR-002` elapsed-hours calculation
+- SLA compliance and breach classification
+- Integration review, final documentation, and release verification
 
 ## [0.2.0] - 2026-07-28
 
