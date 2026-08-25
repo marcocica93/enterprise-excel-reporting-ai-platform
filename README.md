@@ -1,6 +1,7 @@
 # Enterprise Excel Reporting & AI Platform
 
-[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](CHANGELOG.md)
+[![Release](https://img.shields.io/badge/release-0.2.0-blue.svg)](CHANGELOG.md)
+[![Development](https://img.shields.io/badge/development-0.3.0%20in%20progress-orange.svg)](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/cleaning-business-rules-engine)
 
 An enterprise-oriented Python platform for validating operational Excel data, applying deterministic business rules, calculating KPIs, producing auditable reports, and later generating AI-assisted management commentary.
 
@@ -70,20 +71,26 @@ See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
 | `VAL-006` | Completed tickets require `closed_at` |
 | `VAL-007` | Active tickets must not contain `closed_at` |
 | `VAL-008` | `closed_at` must not precede `created_at` |
-| `VAL-009` | `closed_at`, when present, must be a valid datetime |
-| `VAL-010` | Priority must be `P1`, `P2`, `P3`, or `P4` |
-| `VAL-011` | `assigned_team` is required |
-| `VAL-012` | `sla_target_hours` must be present, numeric, and greater than zero |
+| `VAL-009` | `closed_at`, when present, must be## Current development focus
 
-## Current development focus
+**v0.3.0 — Cleaning and Business Rules Engine (in progress)**
 
-The next planned milestone is **v0.3.0 — Cleaning and Business Rules Engine**.
+Development is active on [`feature/cleaning-business-rules-engine`](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/cleaning-business-rules-engine).
 
-The next increment will focus on:
+Completed in the current development branch:
 
-- controlled normalization of validated records;
-- explicit separation between data cleaning and business rules;
-- deterministic business-rule outputs;
+- Ticket Cleaning foundation with deterministic normalization of `created_at`, `closed_at`, and `sla_target_hours`;
+- preservation of the source DataFrame during cleaning and business-rule processing;
+- `BR-001`: lifecycle classification from operational statuses into `BACKLOG` and `COMPLETED`;
+- fail-fast protection for unsupported statuses reaching the Business Rules Engine;
+- 65 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine.
+
+Remaining before the stable `v0.3.0` release:
+
+- `BR-002`: deterministic calculation of `elapsed_hours`;
+- SLA compliance and breach classification rules;
+- integration review, final documentation, and release verification.
+puts;
 - preservation of traceability between source and processed data;
 - automated tests for transformations, boundaries, and invalid inputs;
 - documentation of cleaning decisions and business assumptions.
