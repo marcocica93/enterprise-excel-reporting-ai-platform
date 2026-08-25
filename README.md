@@ -176,4 +176,4 @@ During active development, the project remains in the `0.x.x` series. Version `1
 
 ## Author
 
-Marco Cicatiello — Business Analyst transitioning toward Data Analysis, AI Automation, and Applied AI Engineering.
+Marco Cicatiello — Business Analyst and Applied AI Engineer.
