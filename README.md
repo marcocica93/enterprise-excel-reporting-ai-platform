@@ -87,13 +87,13 @@ Completed in the current development branch:
 - Ticket Cleaning foundation with deterministic normalization of `created_at`, `closed_at`, and `sla_target_hours`;
 - preservation of the source DataFrame during cleaning and business-rule processing;
 - `BR-001`: lifecycle classification from operational statuses into `BACKLOG` and `COMPLETED`;
+- `BR-002`: deterministic calculation of `elapsed_hours`, using `report_datetime` for active tickets and `closed_at` for completed tickets;
 - fail-fast protection for unsupported statuses reaching the Business Rules Engine;
-- 65 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine.
+- 69 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine.
 
 Remaining before the stable `v0.3.0` release:
 
-- `BR-002`: deterministic calculation of `elapsed_hours`;
-- SLA compliance and breach classification rules;
+- `BR-003`: SLA compliance and breach classification, including the exact-threshold boundary;
 - integration review, final documentation, and release verification.
 
 ## Planned evolution
