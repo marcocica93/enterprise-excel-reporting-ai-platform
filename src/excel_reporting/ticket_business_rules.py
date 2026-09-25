@@ -10,21 +10,20 @@ from .ticket_validator import (
 
 
 LIFECYCLE_STATUS_COLUMN = "lifecycle_status"
+ELAPSED_HOURS_COLUMN = "elapsed_hours"
 
 
-def classify_ticket_lifecycle(
+def _raise_for_unsupported_statuses(
     dataframe: pd.DataFrame,
-) -> pd.DataFrame:
-    """Classifica i ticket come backlog oppure completati."""
+) -> None:
+    """Interrompe l'elaborazione in presenza di stati non supportati."""
 
-    classified_dataframe = dataframe.copy(deep=True)
-
-    unsupported_status_mask = ~classified_dataframe["status"].isin(
+    unsupported_status_mask = ~dataframe["status"].isin(
         SUPPORTED_STATUSES
     )
 
     unsupported_statuses = (
-        classified_dataframe.loc[
+        dataframe.loc[
             unsupported_status_mask,
             "status",
         ]
@@ -40,6 +39,15 @@ def classify_ticket_lifecycle(
             f"Unsupported ticket status: {formatted_statuses}"
         )
 
+
+def classify_ticket_lifecycle(
+    dataframe: pd.DataFrame,
+) -> pd.DataFrame:
+    """Classifica i ticket come backlog oppure completati."""
+
+    classified_dataframe = dataframe.copy(deep=True)
+    _raise_for_unsupported_statuses(classified_dataframe)
+
     classified_dataframe[LIFECYCLE_STATUS_COLUMN] = pd.NA
 
     classified_dataframe.loc[
@@ -53,3 +61,28 @@ def classify_ticket_lifecycle(
     ] = "COMPLETED"
 
     return classified_dataframe
+
+
+def calculate_ticket_elapsed_hours(
+    dataframe: pd.DataFrame,
+    report_datetime: pd.Timestamp,
+) -> pd.DataFrame:
+    """Calcola le ore trascorse dalla creazione del ticket."""
+
+    elapsed_dataframe = dataframe.copy(deep=True)
+    _raise_for_unsupported_statuses(elapsed_dataframe)
+
+    completed_ticket_mask = elapsed_dataframe["status"].isin(
+        COMPLETED_STATUSES
+    )
+
+    end_datetime = elapsed_dataframe["closed_at"].where(
+        completed_ticket_mask,
+        report_datetime,
+    )
+
+    elapsed_dataframe[ELAPSED_HOURS_COLUMN] = (
+        end_datetime - elapsed_dataframe["created_at"]
+    ).dt.total_seconds() / 3600
+
+    return elapsed_dataframe
