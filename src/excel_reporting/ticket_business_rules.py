@@ -11,6 +11,7 @@ from .ticket_validator import (
 
 LIFECYCLE_STATUS_COLUMN = "lifecycle_status"
 ELAPSED_HOURS_COLUMN = "elapsed_hours"
+SLA_STATUS_COLUMN = "sla_status"
 
 
 def _raise_for_unsupported_statuses(
@@ -86,3 +87,22 @@ def calculate_ticket_elapsed_hours(
     ).dt.total_seconds() / 3600
 
     return elapsed_dataframe
+
+
+def classify_ticket_sla(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """Applica BR-003 ai ticket validati con ore trascorse gia calcolate.
+
+    Richiede elapsed_hours e sla_target_hours numerici e non mancanti,
+    prodotti dalla pipeline di validazione, cleaning e calcolo BR-002.
+    Restituisce una copia con sla_status: MET entro la soglia inclusa,
+    BREACHED oltre la soglia. Non arrotonda le ore e preserva i dati sorgente.
+    """
+
+    classified_dataframe = dataframe.copy(deep=True)
+    breached_mask = classified_dataframe[ELAPSED_HOURS_COLUMN].gt(
+        classified_dataframe["sla_target_hours"]
+    )
+    classified_dataframe[SLA_STATUS_COLUMN] = "MET"
+    classified_dataframe.loc[breached_mask, SLA_STATUS_COLUMN] = "BREACHED"
+
+    return classified_dataframe

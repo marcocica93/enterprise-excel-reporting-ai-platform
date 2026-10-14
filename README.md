@@ -88,13 +88,33 @@ Completed in the current development branch:
 - preservation of the source DataFrame during cleaning and business-rule processing;
 - `BR-001`: lifecycle classification from operational statuses into `BACKLOG` and `COMPLETED`;
 - `BR-002`: deterministic calculation of `elapsed_hours`, using `report_datetime` for active tickets and `closed_at` for completed tickets;
+- `BR-003`: SLA classification into `MET` or `BREACHED`, with exact equality classified as `MET` and no rounding before comparison;
 - fail-fast protection for unsupported statuses reaching the Business Rules Engine;
-- 69 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine.
+- 80 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine, including the approved synthetic SLA baseline.
 
 Remaining before the stable `v0.3.0` release:
 
-- `BR-003`: SLA compliance and breach classification, including the exact-threshold boundary;
 - integration review, final documentation, and release verification.
+
+### SLA classification contract
+
+`classify_ticket_sla(dataframe)` applies BR-003 to valid, cleaned records after
+`calculate_ticket_elapsed_hours`. It returns a copy with `sla_status`:
+
+- `MET` when `elapsed_hours <= sla_target_hours`;
+- `BREACHED` when `elapsed_hours > sla_target_hours`.
+
+Both input columns must contain non-missing numeric values from the upstream
+pipeline, with non-negative elapsed hours and positive SLA targets. Raw-data
+validation remains the responsibility of the Validation Engine; this function
+does not validate raw records or recalculate elapsed hours. Use the same explicit,
+non-missing `report_datetime` for validation and elapsed-time calculation.
+
+The comparison preserves fractional hours without rounding. The function supports
+empty input and preserves source columns, row order, and index without mutating
+the input. Run lifecycle classification first if `lifecycle_status` is needed in
+the output. The synthetic integration test verifies 20 valid and 10 rejected
+records, with 10 valid tickets classified as `MET` and 10 as `BREACHED`.
 
 ## Planned evolution
 
