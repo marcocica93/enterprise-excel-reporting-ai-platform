@@ -528,3 +528,17 @@ def test_validate_tickets_rejects_non_positive_sla_target_hours(
     assert result.rejected_records.iloc[0]["validation_errors"] == [
         "VAL-012"
     ]
+
+
+def test_validate_tickets_handles_empty_dataset_without_mutation() -> None:
+    dataframe = pd.DataFrame([make_valid_ticket()]).iloc[:0]
+    original = dataframe.copy(deep=True)
+
+    result = validate_tickets(dataframe, REPORT_DATETIME)
+
+    pd.testing.assert_frame_equal(result.valid_records, original)
+    assert result.rejected_records.empty
+    assert result.rejected_records.columns.tolist() == [
+        *dataframe.columns, "validation_errors",
+    ]
+    pd.testing.assert_frame_equal(dataframe, original)

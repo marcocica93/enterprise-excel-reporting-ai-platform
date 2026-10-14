@@ -267,3 +267,30 @@ def test_sla_pipeline_matches_approved_synthetic_baseline() -> None:
     assert result.index.intersection(validation.rejected_records.index).empty
     pd.testing.assert_frame_equal(result[elapsed.columns], elapsed)
     pd.testing.assert_frame_equal(source, original)
+
+
+@pytest.mark.parametrize("input_case", ["empty", "all_rejected"])
+def test_business_rule_pipeline_handles_no_valid_records(input_case: str) -> None:
+    dataset_path = (
+        Path(__file__).resolve().parents[1]
+        / "examples/input/synthetic_it_ticket_dataset.xlsx"
+    )
+    source = load_excel_tickets(dataset_path)
+    source = source.iloc[:0] if input_case == "empty" else source.iloc[20:]
+    original = source.copy(deep=True)
+    report_datetime = pd.Timestamp("2026-07-01 12:00")
+    validation = validate_tickets(source, report_datetime)
+
+    result = classify_ticket_sla(calculate_ticket_elapsed_hours(
+        classify_ticket_lifecycle(clean_tickets(validation.valid_records)),
+        report_datetime,
+    ))
+
+    assert result.empty
+    assert len(validation.rejected_records) == len(source)
+    assert result.columns.tolist() == [
+        *source.columns, LIFECYCLE_STATUS_COLUMN,
+        ELAPSED_HOURS_COLUMN, SLA_STATUS_COLUMN,
+    ]
+    assert pd.api.types.is_float_dtype(result[ELAPSED_HOURS_COLUMN])
+    pd.testing.assert_frame_equal(source, original)
