@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### Planned
+### In development
 
 - v0.4.0 — KPI and Reporting Engine
+- Approved KPI Engine specification with executive, team, priority, data-quality, and reconciliation contracts
+- Explicit separation between current SLA health and completed-ticket SLA compliance
+- Deterministic ordering, precision, empty-input, and zero-denominator rules
 
 ## [0.3.0] - 2026-11-12
 
