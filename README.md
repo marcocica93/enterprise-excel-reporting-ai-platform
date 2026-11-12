@@ -1,7 +1,7 @@
 # Enterprise Excel Reporting & AI Platform
 
-[![Release](https://img.shields.io/badge/release-0.2.0-blue.svg)](CHANGELOG.md)
-[![Development](https://img.shields.io/badge/development-0.3.0%20in%20progress-orange.svg)](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/cleaning-business-rules-engine)
+[![Release](https://img.shields.io/badge/release-0.3.0-blue.svg)](CHANGELOG.md)
+[![Next milestone](https://img.shields.io/badge/next%20milestone-0.4.0%20planned-lightgrey.svg)](CHANGELOG.md)
 
 An enterprise-oriented Python platform for validating operational Excel data, applying deterministic business rules, calculating KPIs, producing auditable reports, and later generating AI-assisted management commentary.
 
@@ -42,7 +42,7 @@ The approved initial use case is IT ticket management, backlog monitoring, SLA v
 
 ## Current release
 
-**v0.2.0 — Validation Engine and data-quality controls**
+**v0.3.0 — Cleaning and Business Rules Engine**
 
 Completed capabilities:
 
@@ -55,7 +55,12 @@ Completed capabilities:
 - preservation of the source DataFrame;
 - automated coverage for normal, invalid, and boundary cases;
 - verified synthetic acceptance dataset: 30 total records, 20 valid and 10 rejected;
-- 57 automated tests covering the Excel Loader and Validation Engine.
+- deterministic ticket cleaning for datetime and SLA-target fields;
+- `BR-001`: lifecycle classification into `BACKLOG` and `COMPLETED`;
+- `BR-002`: elapsed-hours calculation using `report_datetime` for active tickets and `closed_at` for completed tickets;
+- `BR-003`: SLA classification into `MET` and `BREACHED`, with threshold equality classified as `MET` and no premature rounding;
+- robust handling of empty and all-rejected pipelines;
+- 83 automated tests covering the Excel Loader, Validation Engine, Cleaning Engine, and Business Rules Engine.
 
 See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
 
@@ -78,28 +83,9 @@ See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
 
 ## Current development focus
 
-**v0.3.0 — Cleaning and Business Rules Engine (in progress)**
+**v0.4.0 — KPI and Reporting Engine (planned)**
 
-Development is active on [`feature/cleaning-business-rules-engine`](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/cleaning-business-rules-engine).
-
-Completed in the current development branch:
-
-- Ticket Cleaning foundation with deterministic normalization of `created_at`, `closed_at`, and `sla_target_hours`;
-- preservation of the source DataFrame during cleaning and business-rule processing;
-- `BR-001`: lifecycle classification from operational statuses into `BACKLOG` and `COMPLETED`;
-- `BR-002`: deterministic calculation of `elapsed_hours`, using `report_datetime` for active tickets and `closed_at` for completed tickets;
-- `BR-003`: SLA classification into `MET` or `BREACHED`, with exact equality classified as `MET` and no rounding before comparison;
-- fail-fast protection for unsupported statuses reaching the Business Rules Engine;
-- 83 automated tests passing across the Excel Loader, Validation Engine, Cleaning Engine, and current Business Rules Engine, including the approved synthetic SLA baseline and pipelines with no valid records.
-
-Remaining before the stable `v0.3.0` release:
-
-- publish the verified empty-input correction and verification documentation;
-- merge the approved development branch into `main` and create the `v0.3.0` release tag.
-
-The final local verification passed on 14 October 2026. See
-[v0.3.0 verification](docs/RELEASE_V0.3.0_VERIFICATION.md) for evidence, scope,
-and remaining publication steps. The current published release remains `v0.2.0`.
+The next increment will define and implement the KPI and Reporting Engine. Its business requirements, KPI definitions, input/output contract, and acceptance criteria will be approved before implementation. No v0.4.0 code has been started.
 
 ### SLA classification contract
 
