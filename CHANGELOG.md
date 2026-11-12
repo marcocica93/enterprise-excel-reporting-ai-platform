@@ -6,9 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-### In development
+### Planned
 
-- v0.3.0 — Cleaning and Business Rules Engine
+- v0.4.0 — KPI and Reporting Engine
+
+## [0.3.0] - 2026-11-12
+
+### Added
+
+- Cleaning and Business Rules Engine
 - Ticket Cleaning foundation with deterministic datetime and SLA-target normalization
 - `BR-001` lifecycle classification into `BACKLOG` and `COMPLETED`
 - `BR-002` deterministic `elapsed_hours` calculation for active and completed tickets
@@ -28,11 +34,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Empty datasets retain an object-typed validation-error column, preventing the Pandas string accessor from failing on an inferred floating-point column
 - Empty and all-rejected datasets are covered through the cleaning and business-rule pipeline
-
-### Remaining before release
-
-- Publish the verified empty-input correction and verification documentation
-- Merge the approved development branch into `main` and tag `v0.3.0`
 
 ## [0.2.0] - 2026-07-28
 
@@ -81,6 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Deterministic calculations remain separated from future AI commentary
 - Business logic is designed to remain independent from future Flask delivery interfaces
 
-[Unreleased]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/releases/tag/v0.1.0
