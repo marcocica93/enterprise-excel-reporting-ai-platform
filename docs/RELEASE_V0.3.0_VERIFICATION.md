@@ -4,7 +4,7 @@
 - Scope: Cleaning and Business Rules Engine (BR-001, BR-002, BR-003)
 - Reviewed development commit: `2a3bf2eaf23b1ea58b7256d875cd6396c8840b7c`
 - Verification branch: `release/v0.3.0-verification`
-- Result: local verification passed with the empty-input correction in this branch; publication is pending.
+- Result: verification passed, the correction was merged, and v0.3.0 was published on 12 November 2026.
 
 ## Findings and correction
 
@@ -75,12 +75,10 @@ generation, CLI/application orchestration, Flask, AI commentary, and deployment
 are not delivered by this milestone. The complete MVP acceptance criteria are
 therefore not all satisfied yet.
 
-## Publication steps
+## Publication record
 
-1. Commit and publish this correction, regression tests, and documentation.
-2. Review and merge into `feature/cleaning-business-rules-engine`.
-3. Prepare release metadata in README and CHANGELOG, then review the development
-   branch for merge into `main`.
-4. Create `v0.3.0` only on the approved release commit.
-
-Commit, push, merge, and tagging require Marco's authorization under `AGENTS.md`.
+- Pull request #15 merged the verified Cleaning and Business Rules Engine into `main`.
+- Pull request #16 aligned the README and changelog with the stable release.
+- Stable release commit: `3841b7f3f23cd42c102ee4ca109efa19c313951e`.
+- Annotated tag `v0.3.0` points to the stable release commit.
+- The next planned milestone is v0.4.0 — KPI and Reporting Engine.
