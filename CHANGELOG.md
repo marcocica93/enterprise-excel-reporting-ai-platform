@@ -12,19 +12,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Ticket Cleaning foundation with deterministic datetime and SLA-target normalization
 - `BR-001` lifecycle classification into `BACKLOG` and `COMPLETED`
 - `BR-002` deterministic `elapsed_hours` calculation for active and completed tickets
+- `BR-003` SLA classification into `MET` and `BREACHED`, including the exact-threshold boundary
 - Fractional-hour preservation without premature rounding
 - Fail-fast protection for unsupported statuses reaching the Business Rules Engine
 
 ### Quality
 
-- Source DataFrames remain unchanged during cleaning, lifecycle classification, and elapsed-hours calculation
-- Automated suite expanded from 57 to 69 passing tests
+- Source DataFrames remain unchanged during cleaning, lifecycle classification, elapsed-hours calculation, and SLA classification
+- Automated suite expanded from 57 to 83 passing tests
+- BR-003 coverage includes fractional-hour boundaries, zero duration, empty input, determinism, and source/index preservation
+- Synthetic pipeline verification confirms 20 valid and 10 rejected records, with 10 SLA met and 10 SLA breached
 - Existing Excel Loader and Validation Engine behavior remains regression-safe
+
+### Fixed
+
+- Empty datasets retain an object-typed validation-error column, preventing the Pandas string accessor from failing on an inferred floating-point column
+- Empty and all-rejected datasets are covered through the cleaning and business-rule pipeline
 
 ### Remaining before release
 
-- `BR-003` SLA compliance and breach classification, including the exact-threshold boundary
-- Integration review, final documentation, and release verification
+- Publish the verified empty-input correction and verification documentation
+- Merge the approved development branch into `main` and tag `v0.3.0`
 
 ## [0.2.0] - 2026-07-28
 

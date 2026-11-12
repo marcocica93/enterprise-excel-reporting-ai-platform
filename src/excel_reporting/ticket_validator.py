@@ -205,7 +205,11 @@ def validate_tickets(
         if is_non_positive:
             validation_errors[position].append("VAL-012")
 
-    working_dataframe[VALIDATION_ERRORS_COLUMN] = validation_errors
+    working_dataframe[VALIDATION_ERRORS_COLUMN] = pd.Series(
+        validation_errors,
+        index=working_dataframe.index,
+        dtype=object,
+    )
 
     rejected_mask = (
         working_dataframe[VALIDATION_ERRORS_COLUMN]
