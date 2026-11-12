@@ -1,7 +1,7 @@
 # Enterprise Excel Reporting & AI Platform
 
 [![Release](https://img.shields.io/badge/release-0.3.0-blue.svg)](CHANGELOG.md)
-[![Next milestone](https://img.shields.io/badge/next%20milestone-0.4.0%20planned-lightgrey.svg)](CHANGELOG.md)
+[![Development](https://img.shields.io/badge/development-0.4.0%20in%20progress-orange.svg)](CHANGELOG.md)
 
 An enterprise-oriented Python platform for validating operational Excel data, applying deterministic business rules, calculating KPIs, producing auditable reports, and later generating AI-assisted management commentary.
 
@@ -83,9 +83,9 @@ See [CHANGELOG.md](CHANGELOG.md) for the detailed release history.
 
 ## Current development focus
 
-**v0.4.0 — KPI and Reporting Engine (planned)**
+**v0.4.0 — KPI and Reporting Engine (in progress)**
 
-The next increment will define and implement the KPI and Reporting Engine. Its business requirements, KPI definitions, input/output contract, and acceptance criteria will be approved before implementation. No v0.4.0 code has been started.
+Development is active on [`feature/kpi-reporting-engine`](https://github.com/marcocica93/enterprise-excel-reporting-ai-platform/tree/feature/kpi-reporting-engine). The approved [`KPI Engine Specification`](docs/KPI_SPECIFICATION.md) defines executive, team, priority, data-quality, and reconciliation outputs. Production implementation has not started.
 
 ### SLA classification contract
 
